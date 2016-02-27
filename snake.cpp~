@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include <string.h>
-#include <fstream>
 
 using namespace std;
 
@@ -107,16 +105,16 @@ void Input()
 		switch (getchar())
 		{
 		case 'a':
-			if(dir != RIGHT) dir = LEFT;
+			dir = LEFT;
 			break;
 		case 'd':
-			if(dir != LEFT) dir = RIGHT;
+			dir = RIGHT;
 			break;
 		case 'w':
-			if(dir != DOWN) dir = UP;
+			dir = UP;
 			break;
 		case 's':
-			if(dir != UP) dir = DOWN;
+			dir = DOWN;
 			break;
 		case 'x':
 			gameOver = true;
@@ -131,7 +129,7 @@ void Logic()
 	int prev2X, prev2Y;
 	tailX[0] = x;
 	tailY[0] = y;
-	for (int i = 1; i < nTail; i++) //ntail = num of parts after head
+	for (int i = 1; i < nTail; i++) //ntail = parts after head
 	{
 		prev2X = tailX[i];
 		prev2Y = tailY[i];
@@ -174,22 +172,9 @@ void Logic()
 		nTail++;
 	}
 }
-
-void scoreio()
-{
-	ofstream file;
-	file.open("scores.dat", ios::app);
-	file<<score;
-	file.close();
-}
-
 int main()
 {
-	int mill;
-
-	cout<<"\tSNAKE"<<endl<<"CHOOSE DIFFICULTY LEVEL (1 - 10): ";
-	cin>>mill;
-	mill = 10 * (10 - mill);
+	int mill=70;
 	Setup();
 	while (!gameOver)
 	{
@@ -201,7 +186,5 @@ int main()
 		ts.tv_nsec = (mill % 1000) * 1000000;
 		nanosleep(&ts, NULL);
 	}
-
-	scoreio();
 	return 0;
 }
