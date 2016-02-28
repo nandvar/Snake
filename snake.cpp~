@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
+#include <string.h>
+#include <fstream>
+
+#define NO_REC 10
 
 using namespace std;
 
@@ -105,16 +109,16 @@ void Input()
 		switch (getchar())
 		{
 		case 'a':
-			dir = LEFT;
+			if(dir != RIGHT) dir = LEFT;
 			break;
 		case 'd':
-			dir = RIGHT;
+			if(dir != LEFT) dir = RIGHT;
 			break;
 		case 'w':
-			dir = UP;
+			if(dir != DOWN) dir = UP;
 			break;
 		case 's':
-			dir = DOWN;
+			if(dir != UP) dir = DOWN;
 			break;
 		case 'x':
 			gameOver = true;
@@ -129,7 +133,7 @@ void Logic()
 	int prev2X, prev2Y;
 	tailX[0] = x;
 	tailY[0] = y;
-	for (int i = 1; i < nTail; i++) //ntail = parts after head
+	for (int i = 1; i < nTail; i++) //ntail = num of parts after head
 	{
 		prev2X = tailX[i];
 		prev2Y = tailY[i];
@@ -172,9 +176,81 @@ void Logic()
 		nTail++;
 	}
 }
+
+int scoreio(int i)
+{
+	/*
+	i = 0: GET mode (Incomplete)
+		Get your highest score from file.
+		If your record doesn't exist, get highest score ever.
+
+	i = 1: PUT mode (Pending)
+		Put your score into the file, after sorting.
+
+	i = 2: GETALL mode (Pending)
+		Get array of all recorded highscores.
+	*/
+
+	int count = 0;
+
+	struct hscores
+	{
+		string name;
+		int score;
+	}hi[NO_REC];
+
+	string id;
+	cout<<"Enter your id: ";
+	cin>>id;
+
+	switch (i)
+	{
+		case 0:
+		{
+			ifstream sfile;
+			sfile.open("scores.dat");
+			for(int j = 0; j < NO_REC || !sfile.eof(); j++, count++)
+			{
+				sfile>>hi[j].name;
+				sfile>>hi[j].score;
+			}
+			sfile.close();
+
+			cout<<endl<<count;
+
+			return 1000;
+		}
+
+		case 1:
+		{
+			ofstream sfile;
+			sfile.open("scores.dat", ios::app);
+			sfile<<score;
+			sfile.close();
+			return NULL;
+		}
+
+		case 2:
+		{
+			return 1000;
+		}
+
+		default:
+		{
+			return 1000;
+		}
+	}
+}
+
 int main()
 {
-	int mill=70;
+	int mill, high;
+
+	high = scoreio(0);
+
+	cout<<"\tSNAKE"<<endl<<"CHOOSE DIFFICULTY LEVEL (1 - 10): ";
+	cin>>mill;
+	mill = 10 * (10 - mill);
 	Setup();
 	while (!gameOver)
 	{
@@ -186,5 +262,8 @@ int main()
 		ts.tv_nsec = (mill % 1000) * 1000000;
 		nanosleep(&ts, NULL);
 	}
+
+	if (score > high)
+		scoreio(1);
 	return 0;
 }
