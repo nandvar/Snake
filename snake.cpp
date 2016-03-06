@@ -183,6 +183,7 @@ void Logic()
 	}
 }
 
+<<<<<<< HEAD
 void scoreio(string s)
 {
 	/*
@@ -190,10 +191,25 @@ void scoreio(string s)
 	Prints user's score and the highscores from the array.
 	Sorts array with users score.
 	Puts the array to the file. 
+=======
+int scoreio(int i)
+{
+	/*
+	i = 0: GET mode (Incomplete)
+		Get your highest score from file.
+		If your record doesn't exist, get highest score ever.
+
+	i = 1: PUT mode (Incomplete)
+		Put your score into the file, after sorting.
+
+	i = 2: GETALL mode (Pending)
+		Get array of all recorded highscores.
+>>>>>>> 21a39d4e873049036d6c9a98ec27e1526fa495d5
 	*/
 
 	int count = 0;
 
+<<<<<<< HEAD
 	struct hscores hi[NO_REC+1];
 
 	fstream sfile;
@@ -233,10 +249,60 @@ void scoreio(string s)
 
 	cout<<"\nYour Score:-\n"<<s<<"---"<<score<<endl;
 	sofile.close();
+=======
+	struct hscores
+	{
+		string name;
+		int score;
+	}hi[NO_REC];
+
+	string id;
+	cout<<"Enter your id: ";
+	cin>>id;
+
+	switch (i)
+	{
+		case 0:
+		{
+			ifstream sfile;
+			sfile.open("scores.dat");
+			for(int j = 0; j < NO_REC || !sfile.eof(); j++, count++)
+			{
+				sfile>>hi[j].name;
+				sfile>>hi[j].score;
+			}
+			sfile.close();
+
+			cout<<endl<<count;
+
+			return 1000; //dummy value. change later
+		}
+
+		case 1:
+		{
+			ofstream sfile;
+			sfile.open("scores.dat", ios::app);
+			sfile<<score;
+			sfile.close();
+			return -1;
+		}
+
+		case 2:
+		{
+			return 1000; //dummy value
+		}
+
+		default:
+		{
+			return 1000; //dummy value
+		}
+	}
+>>>>>>> 21a39d4e873049036d6c9a98ec27e1526fa495d5
 }
 
 int main()
 {
+<<<<<<< HEAD
 	int mill;
 	system("clear");
 	cout<<"      _/_/_/  _/      _/    _/_/    _/    _/  _/_/_/_/   "<<endl;
@@ -249,6 +315,14 @@ int main()
 	string id;
 	cout<<"Enter your Name: ";
 	cin>>id;
+=======
+	int mill, high;
+
+	high = scoreio(0); //get the highest score in high
+
+	cout<<"\tSNAKE"<<endl<<"CHOOSE DIFFICULTY LEVEL (1 - 10): ";
+	cin>>mill;
+>>>>>>> 21a39d4e873049036d6c9a98ec27e1526fa495d5
 	mill = 10 * (10 - mill);
 	Setup();
 	while (!gameOver)
@@ -261,7 +335,14 @@ int main()
 		ts.tv_nsec = (mill % 1000) * 1000000;
 		nanosleep(&ts, NULL);
 	}
+<<<<<<< HEAD
 	scoreio(id);
 
+=======
+
+	if (score > high)
+		scoreio(1); //if you beat the lowest highscore, add
+				//to high score file
+>>>>>>> 21a39d4e873049036d6c9a98ec27e1526fa495d5
 	return 0;
 }
