@@ -197,7 +197,7 @@ void scoreio(string s)
 	struct hscores hi[NO_REC+1];
 
 	fstream sfile;
-	sfile.open("scores.bin",ios::binary | ios::in);
+	sfile.open("scores.dat",ios::binary | ios::in);
 	for(int j = 0; j < NO_REC || !sfile.eof(); j++, count++)
 	{
 		sfile.read((char*)&hi[j],sizeof(struct hscores));
@@ -224,7 +224,7 @@ void scoreio(string s)
 	cout<<"High Scores:-\n";
 
 	fstream sofile;
-	sofile.open("scores.bin",ios::binary | ios::out);
+	sofile.open("scores.dat",ios::binary | ios::out);
 	for(int i=0; i<count ;i++)
 	{
 		cout<<hi[i].name<<"---"<<hi[i].score<<endl;
