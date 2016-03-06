@@ -11,7 +11,7 @@
 using namespace std;
 struct hscores
 {
-	string name;
+	char name[20];
 	int score;
 };
 
@@ -20,16 +20,16 @@ int main()
 	int count = 3;
 	struct hscores hi[3];
 
-	hi[0].name="AV";
+	strcpy(hi[0].name,"AV");
 	hi[0].score=220;
-	hi[1].name="AM";
+	strcpy(hi[1].name,"AM");
 	hi[1].score=120;
-	hi[2].name="AS";
+	strcpy(hi[2].name,"AS");
 	hi[2].score=80;
 	
 
 	fstream sofile;
-	sofile.open("scores.bin",ios::out | ios::binary);
+	sofile.open("scores.dat",ios::out);
 	for(int i=0; i<count ;i++)
 	{
 		sofile.write((char*)&hi[i],sizeof(struct hscores));
